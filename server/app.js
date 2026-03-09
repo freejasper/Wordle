@@ -26,11 +26,23 @@ let dailyWord = getWord();
 
 cron.schedule('0 0 * * *', () => {
     dailyWord = getWord();
-    // Back and sync user data
-    const userData = getAllUsers();
-    writeBackup(userData);
-    const backupData = readBackup();
-    syncUsers(backupData);
+
+    try {
+        async function writeToServer() {
+            const userData = getAllUsers();
+            await writeBackup(userData);
+        }
+        writeToServer();
+        async function readFromServer() {
+            const backupData = await readBackup();
+            if (backupData) {
+                syncUsers(backupData);
+            }
+        }
+        readFromServer();
+    } catch (err) {
+        console.error('Error during sync:', err);
+    }
 }, {
     scheduled: true,
     timezone: 'Australia/Brisbane'
@@ -141,6 +153,30 @@ app.put('/api/updateUser/:id', (req, res) => {
     console.log('Updated user:', newUser);
     res.status(200).json(newUser);
 });
+
+
+// app.get('/api/sync', (req, res) => {
+//     try {
+//         async function writeToServer() {
+//             const userData = await getAllUsers();
+//             console.log('SYNC: user data pre sync:', userData);
+//             await writeBackup(userData);
+//         }
+//         writeToServer();
+//         async function readFromServer() {
+//             const backupData = await readBackup();
+//             if (backupData) {
+//                 await syncUsers(backupData);
+//                 console.log('SYNC: backup data:', backupData);
+//             }
+//         }
+//         readFromServer();
+//         res.json({ message: 'Sync complete' });
+//     } catch (err) {
+//         console.error('Error during sync:', err);
+//         res.status(500).json({ error: 'Sync failed' });
+//     }
+// })
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

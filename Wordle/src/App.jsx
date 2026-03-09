@@ -43,6 +43,19 @@ function App() {
 
   const [currentGuess, setCurrentGuess] = useState(1);
 
+  // useEffect(() => {
+  //   try {
+  //     async function syncWithServer() {
+  //       const response = await fetch('/api/sync');
+  //       const data = await response.json();
+  //       console.log('Server sync response:', data);
+  //     }
+  //     syncWithServer();
+  //   } catch (err) {
+  //     console.error('Server sync error:', err);
+  //   }
+  // }, []);
+
   // Fetch new id or game history as needed on load
   useEffect(() => {
     const id = localStorage.getItem('id');
