@@ -13,7 +13,7 @@
 
 const users = [];
 
-const id = users.length + 1;
+let id = 1;
 
 function getAllUsers() {
     return users;
@@ -22,6 +22,7 @@ function getAllUsers() {
 function addUser(data) {
     const user = { id, ...data };
     users.push(user);
+    id++;
     return user;
 }
 
