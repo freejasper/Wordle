@@ -15,16 +15,9 @@ export default function LetterInputShell({
     setCurrentGuess, 
     setAlphabet 
     }) {
-    const [input, setInput] = useState(['', '', '', '', '']);
-    const [inputClassName, setInputClassName] = useState(['', '', '', '', '']);
 
     const inputDisabled = !(currentGuess === inputGroup && !wordFound);
     
-    // set input and inputs status from user history
-    useEffect(() => {
-        setInput(inputs[inputGroup - 1]);
-        setInputClassName(inputStatus[inputGroup - 1]);
-    }, [inputs, inputStatus, inputGroup]);
 
     const handleChange = (e) => {
         if (wordFound) return;
