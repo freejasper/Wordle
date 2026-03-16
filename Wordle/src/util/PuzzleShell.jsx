@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Puzzle from '../ui/Puzzle.jsx';
 import KeyboardShell from './KeyboardShell.jsx';
 
@@ -14,25 +14,25 @@ export default function PuzzleShell ({
     setWordFound
 }) {
     // Helper function to seperate into standard keyboard rows
-    function splitAlphabet (start, end) {
-        const alphaKeys = Object.keys(alphabet);
-        const newLetters = {};
-        alphaKeys.forEach((letter, index) => {
-            if ( alphaKeys.indexOf(start) <= index && alphaKeys.indexOf(end) >= index) {
-                newLetters[letter] = (<div key={letter} className={`key ${letter.toLowerCase()} ${alphabet[letter]}`}>{letter}</div>);
-            }
-        });
-        return newLetters;
-    }
+    // function splitAlphabet (start, end) {
+    //     const alphaKeys = Object.keys(alphabet);
+    //     const newLetters = {};
+    //     alphaKeys.forEach((letter, index) => {
+    //         if ( alphaKeys.indexOf(start) <= index && alphaKeys.indexOf(end) >= index) {
+    //             newLetters[letter] = (<div key={letter} className={`key ${letter.toLowerCase()} ${alphabet[letter]}`}>{letter}</div>);
+    //         }
+    //     });
+    //     return newLetters;
+    // }
 
-    const keyboardRows = [splitAlphabet('Q', 'P'), splitAlphabet('A', 'L'), splitAlphabet('Z', 'M')];
+    // const keyboardRows = [splitAlphabet('Q', 'P'), splitAlphabet('A', 'L'), splitAlphabet('Z', 'M')];
 
-    const submitTrigger = useRef(null);
+    // const submitTrigger = useRef(null);
 
-    const childSubmitTrigger = () => {
-        submitTrigger.current?.handleSubmit();
-        console.log('submit triggered in PuzzleShell');
-    }
+    // const childSubmitTrigger = () => {
+    //     submitTrigger.current?.handleSubmit();
+    //     console.log('submit triggered in PuzzleShell');
+    // }
 
     // const submitButton = (<button key='button' onClick={childSubmitTrigger} className="submit-button">Enter</button>);
     // keyboardRows[2]['Enter'] = submitButton;
