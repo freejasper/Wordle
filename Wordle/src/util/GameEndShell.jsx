@@ -4,7 +4,8 @@ import ShareShell from "./ShareShell";
 export default function GameEndShell({
     inputStatus,
     wordFound,
-    currentGuess
+    currentGuess,
+    handleShowEnd
     }) {
         const [correctWord, setCorrectWord] = useState('');
         const [definition, setDefinition] = useState({});
@@ -36,14 +37,10 @@ export default function GameEndShell({
             getDefinition();
         }, [correctWord]);
 
-        // useEffect(() => {
-        //     console.log('Correct word:', correctWord);
-        //     console.log('Definition:', definition);
-        // }, [correctWord, definition]);
-
         return (
             <>
                 <div className='gameEndContainer'>
+                    <button id='show' onClick={handleShowEnd}>View puzzle</button>
                     {wordFound && <h1>Well done, you found the word!</h1>}
                     {!wordFound && 
                         <div>

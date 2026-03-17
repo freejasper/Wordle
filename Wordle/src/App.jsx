@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import './App.css'
 import PuzzleShell from './util/PuzzleShell.jsx';
 import GameStartShell from './util/GameStartShell.jsx';
@@ -97,15 +97,22 @@ function App() {
 
   const gameResume = inputs.map(row => row.filter(Boolean).length > 0).filter(Boolean).length > 0;
 
-  const gameEnd = wordFound || currentGuess > 6;
+  const [showEnd, setShowEnd] = useState(true);
+  
+  function handleShowEnd(e) {
+    if (e.target.id === 'show') setShowEnd(false);
+    if (e.target.id === 'hide') setShowEnd(true);
+  }
+
+  const gameEnd = wordFound && showEnd || currentGuess > 6 && showEnd;
 
   return (
     <>
-      {(!gameStart && !gameEnd) && <GameStartShell 
+      {(!gameStart && !gameEnd && showEnd) && <GameStartShell 
         setGameStart={setGameStart}
         gameResume={gameResume} 
       />}
-      {(gameStart && !gameEnd) && <PuzzleShell
+      {((gameStart && !gameEnd) || !showEnd) && <PuzzleShell
         inputs={inputs} 
         setInputs={setInputs} 
         inputStatus={inputStatus} 
@@ -115,10 +122,12 @@ function App() {
         wordFound={wordFound}
         setWordFound={setWordFound}
       />}
+      {!showEnd && <button id='hide' onClick={handleShowEnd}>View Score</button>}
       {gameEnd && <GameEndShell
         inputStatus={inputStatus}
         wordFound={wordFound}
         currentGuess={currentGuess}
+        handleShowEnd={handleShowEnd}
       />}
     </>
   )

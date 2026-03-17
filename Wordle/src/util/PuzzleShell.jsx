@@ -13,32 +13,7 @@ export default function PuzzleShell ({
     wordFound,
     setWordFound
 }) {
-    // Helper function to seperate into standard keyboard rows
-    // function splitAlphabet (start, end) {
-    //     const alphaKeys = Object.keys(alphabet);
-    //     const newLetters = {};
-    //     alphaKeys.forEach((letter, index) => {
-    //         if ( alphaKeys.indexOf(start) <= index && alphaKeys.indexOf(end) >= index) {
-    //             newLetters[letter] = (<div key={letter} className={`key ${letter.toLowerCase()} ${alphabet[letter]}`}>{letter}</div>);
-    //         }
-    //     });
-    //     return newLetters;
-    // }
-
-    // const keyboardRows = [splitAlphabet('Q', 'P'), splitAlphabet('A', 'L'), splitAlphabet('Z', 'M')];
-
-    // const submitTrigger = useRef(null);
-
-    // const childSubmitTrigger = () => {
-    //     submitTrigger.current?.handleSubmit();
-    //     console.log('submit triggered in PuzzleShell');
-    // }
-
-    // const submitButton = (<button key='button' onClick={childSubmitTrigger} className="submit-button">Enter</button>);
-    // keyboardRows[2]['Enter'] = submitButton;
-
     const currentGuessIndex = currentGuess - 1;
-
 
     const handlePress = (e) => {
         const letter = e.target.id.toUpperCase();
