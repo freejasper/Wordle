@@ -53,7 +53,7 @@ app.get('/api/word', (req, res) => {
 });
 
 app.get('/api/checkWord/:guess', (req, res) => {
-    const guess = req.params.guess
+    const guess = req.params.guess;
     if (!guess || guess.length > 5) res.status(400).json({ error: 'Invalid' });
 
     console.log('WORD:', dailyWord);

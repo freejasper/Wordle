@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import Puzzle from '../ui/Puzzle.jsx';
+import LetterInputShell from './LetterInputShell.jsx';
 import KeyboardShell from './KeyboardShell.jsx';
 
 export default function PuzzleShell ({  
-    setAlphabet, 
     inputs, 
     setInputs,
     inputStatus, 
@@ -51,6 +51,7 @@ export default function PuzzleShell ({
                 newInputs[currentGuessIndex][emptyIndex] = letter;
                 return newInputs;
             });
+            // set focus to next input
         }
     }
 
@@ -64,6 +65,7 @@ export default function PuzzleShell ({
                 newInputs[currentGuessIndex][emptyIndex - 1] = '';
                 return newInputs;
             });
+            // set focus to previous input
         }
         if (emptyIndex === -1 || emptyIndex < 5) {
             setInputs((prev) => {
@@ -71,12 +73,14 @@ export default function PuzzleShell ({
                 newInputs[currentGuessIndex][4] = '';
                 return newInputs;
             });
+            // set focus to previous input
         }
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const guess = inputs[currentGuessIndex].join();
+        const guess = inputs[currentGuessIndex].join('').trim().toLowerCase();
+        console.log('guess format:', guess);
         if (!guess) return console.error('Guess variable resolved to false');
         if (typeof(guess) !== 'string') return console.error('Guess variable not string format');
         try {
@@ -112,11 +116,13 @@ export default function PuzzleShell ({
                 }
 
                 return setCurrentGuess((prev) => prev + 1);
+                // set focus to next input group
+
             } else {
                 // animate invalid guess
                 setInputs((prev) => {
                     const resetInputs = [...prev];
-                    resetInputs[currentGuess - 1] = ['', '', '', '', ''];
+                    resetInputs[currentGuessIndex] = ['', '', '', '', ''];
                     return resetInputs;
                 });
                 const currentInput = document.querySelector(`#inputGroup${currentGuess} input[data-index="0"]`);
@@ -133,18 +139,16 @@ export default function PuzzleShell ({
             <div className='guessInputContainer'>
                 {inputs.map((inputGroup, index) => (
                 <div key={index} className={'guessInput'}>
-                    
                     <LetterInputShell
                     inputGroup={index + 1}
-                    inputs={inputs}
+                    inputs={inputs[index]}
                     setInputs={setInputs}
-                    inputStatus={inputStatus}
+                    inputStatus={inputStatus[index]}
                     setInputStatus={setInputStatus}
                     wordFound={wordFound}
                     setWordFound={setWordFound}
                     currentGuess={currentGuess}
-                    setCurrentGuess={setCurrentGuess}
-                    setAlphabet={setAlphabet} 
+                    handleSubmit={handleSubmit}
                     />
                 </div>
                 ))}

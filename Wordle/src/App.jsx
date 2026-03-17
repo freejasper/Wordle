@@ -44,7 +44,6 @@ function App() {
           //          currentGuess: Number,
           //          inputs: Array,
           //          inputStatus: Array,
-          //          alphabet: Object
           //         }
           //    }
           // }
@@ -62,7 +61,6 @@ function App() {
             setCurrentGuess(data.currentGuess);
             setInputs(data.inputs);
             setInputStatus(data.inputStatus);
-            setAlphabet(data.alphabet);
           }
         } catch (err) {
           console.error('Error fetching history:', err);
@@ -79,7 +77,7 @@ function App() {
     const data = {
                   history: {
                     [today]: { 
-                      wordFound, currentGuess, inputs, inputStatus, alphabet 
+                      wordFound, currentGuess, inputs, inputStatus 
                     }
                   }
                 };
@@ -95,7 +93,7 @@ function App() {
       }
     }
     updateHistory();
-  }, [wordFound, currentGuess, inputs, inputStatus, alphabet, gameStart]);
+  }, [wordFound, currentGuess, inputs, inputStatus, gameStart]);
 
   const gameResume = inputs.map(row => row.filter(Boolean).length > 0).filter(Boolean).length > 0;
 
@@ -108,7 +106,6 @@ function App() {
         gameResume={gameResume} 
       />}
       {(gameStart && !gameEnd) && <PuzzleShell
-        setAlphabet={setAlphabet} 
         inputs={inputs} 
         setInputs={setInputs} 
         inputStatus={inputStatus} 

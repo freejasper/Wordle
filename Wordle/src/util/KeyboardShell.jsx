@@ -49,6 +49,7 @@ export default function KeyboardShell({
         {Object.keys(keyboardStatus.lineOne).map((key) => (
           <Key 
             key={key}
+            icon={key}
             handlePress={handlePress}
             status={keyboardStatus.lineOne[key]} />
         ))}
@@ -57,6 +58,7 @@ export default function KeyboardShell({
         {Object.keys(keyboardStatus.lineTwo).map((key) => (
           <Key 
             key={key}
+            icon={key}
             handlePress={handlePress}
             status={keyboardStatus.lineTwo[key]} />
         ))}
@@ -65,6 +67,7 @@ export default function KeyboardShell({
         {Object.keys(keyboardStatus.lineThree).map((key) => (
           <Key 
             key={key}
+            icon={key}
             handlePress={handlePress}
             handleDel={handleDel}
             handleSubmit={handleSubmit}

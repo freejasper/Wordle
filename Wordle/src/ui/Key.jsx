@@ -1,22 +1,22 @@
 export default function Key({
-    key,
+    icon,
     handlePress, 
     handleDel, 
     handleSubmit, 
     status
 }) {
-    if (key === 'ENTER') {
+    if (icon === 'ENTER') {
         return (
-            <button className={status} onClick={handleSubmit}>{key}</button>
+            <button id={icon} className={status} onClick={handleSubmit}>{icon}</button>
         )
     }
-    if (key === 'DEL') {
+    if (icon === 'DEL') {
         return (
-            <button className={status} onClick={handleDel}>{key}</button>
+            <button id={icon} className={status} onClick={handleDel}>{icon}</button>
         )
     }
 
     return (
-        <button className={status} onClick={handlePress}>{key}</button>
+        <button id={icon} className={status} onClick={handlePress}>{icon}</button>
     )
 }

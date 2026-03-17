@@ -3,7 +3,6 @@ import LetterInput from '../ui/LetterInput.jsx';
 import '../css/LetterInput.css';
 
 export default function LetterInputShell({ 
-    submitRef,
     inputGroup,
     inputs, 
     setInputs,
@@ -12,11 +11,12 @@ export default function LetterInputShell({
     wordFound, 
     setWordFound, 
     currentGuess, 
-    setCurrentGuess, 
-    setAlphabet 
+    handleSubmit 
     }) {
 
     const inputDisabled = !(currentGuess === inputGroup && !wordFound);
+
+    const currentGuessIndex = currentGuess - 1;
     
 
     const handleChange = (e) => {
@@ -24,9 +24,9 @@ export default function LetterInputShell({
         const value = e.target.value.toUpperCase();
         const index = parseInt(e.target.dataset.index)
         if (/^[A-Z]$/.test(value) || value === '') {
-            setInput((prev) => {
+            setInputs((prev) => {
                 const newInputs = [...prev];
-                newInputs[index] = value;
+                newInputs[currentGuessIndex][index] = value;
                 return newInputs;
             });
         }
@@ -43,92 +43,16 @@ export default function LetterInputShell({
         }
         else if (/^[A-Za-z]$/.test(e.key) && index < 4) {
             const nextInput = document.querySelector(`#inputGroup${inputGroup} input[data-index="${index + 1}"]`);
-            if (nextInput && input[index] !== '') {
+            if (nextInput && inputs[index] !== '') {
                 nextInput.focus();
             }
         }
-        else if (input.forEach((letter) => letter != '')) {
+        else if (e.key === 'Enter' && inputs.forEach((letter) => letter != '')) {
             e.preventDefault();
             const form = document.getElementById(`inputGroup${inputGroup}`);
             form.requestSubmit();
         }
     };
-
-    const handleSubmit = async (e) => {
-        e?.preventDefault();
-        const guess = input.join('').toLowerCase().trim();
-        try {
-            const response = await fetch(`/api/checkWord/${encodeURIComponent(guess)}`);
-            if (!response.ok) throw new Error('Network response was not ok');
-            const data = await response.json();
-            // console.log('fetch response:', data);
-
-            if (data.exists) {
-                setInputs((prev) => {
-                    const newInputs = [...prev];
-                    newInputs[inputGroup - 1] = input;
-                    return newInputs;
-                });
-                
-                // Update input classes
-                let newClasses = [...inputClassName];
-                data.letterResults.forEach((letter, index) => {
-                    const currentLetter = input[index]
-                    if (letter[currentLetter] === 'correct') {
-                        newClasses[index] = 'green';
-                    } else if (letter[currentLetter] === 'present') {
-                        newClasses[index] = 'yellow';
-                    } else {
-                        newClasses[index] = 'wrong';
-                    }
-                });
-                setInputClassName(newClasses);
-
-                setInputStatus((prev) => {
-                    const newStatus = [...prev];
-                    newStatus[inputGroup - 1] = newClasses;
-                    return newStatus;
-                });
-                
-                // Update alphabet classes
-                setAlphabet((prev) => {
-                    const newAlphabet = {...prev};
-                    data.letterResults.forEach((result, index) => {
-                        const letter = input[index];
-                        if (result[letter] === 'correct') {
-                            newAlphabet[letter] = 'green';
-                        } else if (result[letter] === 'present' && newAlphabet[letter] !== 'green') {
-                            newAlphabet[letter] = 'yellow';
-                        } else if (result[letter] === 'absent' && !['green', 'yellow'].includes(newAlphabet[letter])) {
-                            newAlphabet[letter] = 'wrong';
-                        }
-                    });
-                    return newAlphabet;
-                })
-
-                // Check if word is found
-                if (data.correct) {
-                    setWordFound(true);
-                    console.log('Congratulations! You guessed the word!');
-                    return;
-                }
-
-                return setCurrentGuess((prev) => prev + 1);
-            } else {
-                // animate invalid guess
-                setInput(['', '', '', '', '']);
-                const currentInput = document.querySelector(`#inputGroup${inputGroup} input[data-index="0"]`);
-                if (currentInput) currentInput.focus();
-            }
-
-        } catch (err) {
-            console.error('Error validating guess:', err);
-        };
-    };
-
-    useImperativeHandle(submitRef, () => ({
-        handleSubmit
-    }));
 
     // focus next input after submit
     useEffect(() => {
@@ -143,8 +67,8 @@ export default function LetterInputShell({
     return (
         <LetterInput 
             inputGroup={inputGroup} 
-            input={input} 
-            inputClassName={inputClassName} 
+            inputs={inputs} 
+            inputStatus={inputStatus} 
             handleChange={handleChange} 
             handleKeyDown={handleKeyDown}
             handleSubmit={handleSubmit}
